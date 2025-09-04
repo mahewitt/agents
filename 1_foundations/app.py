@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import AzureOpenAI
 import json
 import os
 import requests
@@ -76,8 +76,13 @@ tools = [{"type": "function", "function": record_user_details_json},
 class Me:
 
     def __init__(self):
-        self.openai = OpenAI()
-        self.name = "Ed Donner"
+        openai_api_key = os.getenv('OPENAI_API_KEY')
+        self.openai = AzureOpenAI(
+            api_version="2024-12-01-preview",
+            azure_endpoint="https://ai-foundry-omnia-facts.cognitiveservices.azure.com/",
+            api_key=openai_api_key,
+)
+        self.name = "Mark Hewitt"
         reader = PdfReader("me/linkedin.pdf")
         self.linkedin = ""
         for page in reader.pages:
